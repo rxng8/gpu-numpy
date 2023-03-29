@@ -12,10 +12,10 @@ Setup for tools
 from setuptools import find_packages, setup
 
 setup(
-    name='gnp',
-    packages=["gnp"],
-    version='0.1.0',
-    description='',
-    author='Viet Dung Nguyen',
-    license='MIT',
+  name='gnp',
+  packages=["gnp"],
+  version='0.1.0',
+  description='',
+  author='Viet Dung Nguyen',
+  license='MIT',
 )
