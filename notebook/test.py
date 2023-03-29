@@ -9,9 +9,17 @@ a = gnp.array([1,2,23])
 gnp.add(1 ,2)
 
 # %%
+
 import gnp
 dir(gnp)
 
+# %%
+
+a = gnp.array([1,2])
+
+# %%
+
+a + a
 
 
 # %%

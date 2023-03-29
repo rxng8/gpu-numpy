@@ -7,7 +7,8 @@
 Setup for tools
 """
 
+import numpy as np
 from typing import List, Tuple, Union
 
 
-ArrayLike = Union[int, List, Tuple]
+ArrayLike = Union[int, List, Tuple, np.ndarray]
