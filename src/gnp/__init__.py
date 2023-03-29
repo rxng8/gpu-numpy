@@ -10,4 +10,6 @@ Setup for tools
 # from .base import array
 # from .type import ArrayLike
 
+from gnpc import *
 from .base import array
+

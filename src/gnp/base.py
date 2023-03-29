@@ -9,9 +9,7 @@ Setup for tools
 
 
 import numpy as np
-# import gnp
 from .type import ArrayLike
-
 
 class GNPArray:
   def __init__(self, _array: ArrayLike) -> None:

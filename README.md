@@ -17,7 +17,7 @@
   # install required libraries
   conda env update dev_env.yml
   # Instlal current library
-  pip install -e .
+  python setup.py install
   ```
 
 ## Project Structure and Supported APIs (Planned)

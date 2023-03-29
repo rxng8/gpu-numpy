@@ -8,14 +8,29 @@
 
 Setup for tools
 """
+__version__ = "0.0.1"
 
-from setuptools import find_packages, setup
+from setuptools import find_packages, setup, Extension
+from glob import glob
+from pybind11.setup_helpers import Pybind11Extension, build_ext
+
+ext_modules = [
+  Pybind11Extension(
+    "gnpc",
+    sorted(glob("src/gnpc/*.cpp")),
+  ),
+]
 
 setup(
   name='gnp',
   packages=["gnp"],
+  package_dir={"gnp": "src/gnp"},
+  cmdclass={"build_ext": build_ext},
+  ext_modules=ext_modules,
   version='0.1.0',
   description='',
   author='Viet Dung Nguyen',
-  license='MIT',
+  license='MIT'
 )
+
+
