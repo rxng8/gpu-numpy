@@ -7,8 +7,12 @@
 Setup for tools
 """
 
+
 import numpy as np
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Callable, Iterator, Dict, Sequence
 
 
 ArrayLike = Union[int, List, Tuple, np.ndarray]
+ParamAndGradType = Iterator[Tuple[ArrayLike, ArrayLike]]
+
+

@@ -22,10 +22,13 @@ c = a * b
 t1 = time.time()
 print(f"Time elapse: {t1 - t0}")
 
+# %%
 
 
+a = gnp.array(np.random.randn(1, 10))
+b = gnp.array(np.random.randn(10, 6))
 
-
+(a @ b).shape
 
 # %%
 

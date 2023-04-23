@@ -11,7 +11,6 @@ Setup for tools
 import numpy as np
 from numba import cuda
 
-
 from .type import ArrayLike
 from .kernel import (
   kernel_batch_matmul,
@@ -34,6 +33,23 @@ from .kernel import (
   kernel_rshift,
   kernel_subtract,
   kernel_multiply,
+  kernel_divide_const,
+  kernel_eq_const,
+  kernel_ne_const,
+  kernel_floor_divide_const,
+  kernel_ge_const,
+  kernel_gt_const,
+  kernel_logical_and_const,
+  kernel_logical_or_const,
+  kernel_logical_xor_const,
+  kernel_lshift_const,
+  kernel_lt_const,
+  kernel_mod_const,
+  kernel_add_const,
+  kernel_pow_const,
+  kernel_rshift_const,
+  kernel_subtract_const,
+  kernel_multiply_const
 )
 
 
@@ -58,9 +74,16 @@ class GNPArray:
   def __str__(self):
     return f"GNPArray({self._data})"
 
+  def copy(self):
+    return GNPArray(self._data)
+
   @property
   def shape(self):
     return self._data.shape
+  
+  @property
+  def T(self):
+    return GNPArray(self._data.T)
     
   #### Unary operators
   def __neg__(self):
@@ -85,7 +108,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_lt[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_lt_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_lt[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -93,7 +119,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_gt[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_gt_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_gt[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -101,7 +130,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_lshift[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_lshift_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_lshift[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -109,7 +141,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_ge[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_ge_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_ge[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -117,7 +152,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_eq[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_eq_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_eq[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -125,7 +163,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_ne[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_ne_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_ne[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -134,7 +175,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_add[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_add_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_add[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -142,7 +186,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_subtract[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_subtract_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_subtract[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -150,7 +197,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_multiply[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_multiply_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_multiply[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -158,7 +208,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_divide[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_divide_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_divide[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -166,7 +219,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_floor_divide[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_floor_divide_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_floor_divide[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -174,7 +230,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_mod[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_mod_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_mod[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -182,7 +241,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_pow[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_pow_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_pow[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -190,7 +252,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_rshift[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_rshift_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_rshift[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
   
@@ -198,7 +263,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_lshift[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_lshift_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_lshift[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -206,7 +274,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_logical_and[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_logical_and_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_logical_and[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -214,7 +285,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_logical_or[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_logical_or_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_logical_or[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -222,7 +296,10 @@ class GNPArray:
     d_data = cuda.to_device(np.ravel(self._data))
     d_other = cuda.to_device(np.ravel(other._data))
     d_out = cuda.device_array_like(d_data)
-    kernel_logical_xor[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    if len(other.shape) == 1:
+      kernel_logical_xor_const[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
+    else:
+      kernel_logical_xor[self.blocks_per_grid, self.threads_per_block](d_data, d_other, d_out)
     cuda.synchronize()
     return GNPArray(d_out.copy_to_host().reshape(self._data.shape))
 
@@ -373,3 +450,6 @@ class GNPArray:
       cuda.synchronize()
       self._data = d_out.copy_to_host().reshape((*self._data.shape[:-1], other._data.shape[-1]))
     return self
+  
+  def __repr__(self) -> str:
+    return f"{self._data}"

@@ -48,6 +48,21 @@ def kernel_add(x, y, out):
     out[i] = x[i] + y[i]
 
 @cuda.jit
+def kernel_add_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] + y
+
+@cuda.jit
 def kernel_subtract(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -61,6 +76,21 @@ def kernel_subtract(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = x[i] - y[i]
+
+@cuda.jit
+def kernel_subtract_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] - y
 
 @cuda.jit
 def kernel_multiply(x, y, out):
@@ -78,6 +108,21 @@ def kernel_multiply(x, y, out):
     out[i] = x[i] * y[i]
 
 @cuda.jit
+def kernel_multiply_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] * y
+
+@cuda.jit
 def kernel_divide(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -91,6 +136,21 @@ def kernel_divide(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = x[i] / y[i]
+
+@cuda.jit
+def kernel_divide_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] / y
 
 @cuda.jit
 def kernel_floor_divide(x, y, out):
@@ -108,6 +168,21 @@ def kernel_floor_divide(x, y, out):
     out[i] = x[i] // y[i]
 
 @cuda.jit
+def kernel_floor_divide_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] // y
+
+@cuda.jit
 def kernel_mod(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -121,6 +196,21 @@ def kernel_mod(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = x[i] % y[i]
+
+@cuda.jit
+def kernel_mod_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] % y
 
 @cuda.jit
 def kernel_pow(x, y, out):
@@ -138,6 +228,21 @@ def kernel_pow(x, y, out):
     out[i] = x[i] ** y[i]
 
 @cuda.jit
+def kernel_pow_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] ** y
+
+@cuda.jit
 def kernel_rshift(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -151,6 +256,21 @@ def kernel_rshift(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = x[i] >> y[i]
+
+@cuda.jit
+def kernel_rshift_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] >> y
 
 @cuda.jit
 def kernel_lshift(x, y, out):
@@ -168,6 +288,21 @@ def kernel_lshift(x, y, out):
     out[i] = x[i] << y[i]
 
 @cuda.jit
+def kernel_lshift_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] << y
+
+@cuda.jit
 def kernel_logical_and(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -181,6 +316,21 @@ def kernel_logical_and(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = x[i] and y[i]
+
+@cuda.jit
+def kernel_logical_and_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] and y
 
 @cuda.jit
 def kernel_logical_or(x, y, out):
@@ -198,6 +348,21 @@ def kernel_logical_or(x, y, out):
     out[i] = x[i] or y[i]
 
 @cuda.jit
+def kernel_logical_or_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] or y
+
+@cuda.jit
 def kernel_logical_xor(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -211,6 +376,21 @@ def kernel_logical_xor(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = (x[i] and not y[i]) or (not x[i] and y[i])
+
+@cuda.jit
+def kernel_logical_xor_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = (x[i] and not y) or (not x[i] and y)
 
 @cuda.jit
 def kernel_eq(x, y, out):
@@ -228,6 +408,21 @@ def kernel_eq(x, y, out):
     out[i] = x[i] == y[i]
 
 @cuda.jit
+def kernel_eq_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] == y
+
+@cuda.jit
 def kernel_gt(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -241,6 +436,21 @@ def kernel_gt(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = x[i] > y[i]
+
+@cuda.jit
+def kernel_gt_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] > y
 
 @cuda.jit
 def kernel_lt(x, y, out):
@@ -258,6 +468,21 @@ def kernel_lt(x, y, out):
     out[i] = x[i] < y[i]
 
 @cuda.jit
+def kernel_lt_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] < y
+
+@cuda.jit
 def kernel_le(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -271,6 +496,21 @@ def kernel_le(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = x[i] <= y[i]
+
+@cuda.jit
+def kernel_le_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] <= y
 
 @cuda.jit
 def kernel_ge(x, y, out):
@@ -288,6 +528,21 @@ def kernel_ge(x, y, out):
     out[i] = x[i] >= y[i]
 
 @cuda.jit
+def kernel_ge_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] >= y
+
+@cuda.jit
 def kernel_ne(x, y, out):
   tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
   ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
@@ -301,6 +556,21 @@ def kernel_ne(x, y, out):
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
     out[i] = x[i] != y[i]
+
+@cuda.jit
+def kernel_ne_const(x, y, out):
+  tx = cuda.threadIdx.x # this is the unique thread ID within a 1D block
+  ty = cuda.blockIdx.x  # this is the unique block ID within the 1D grid
+
+  block_size = cuda.blockDim.x  # number of threads per block
+  grid_size = cuda.gridDim.x    # number of blocks in the grid
+  
+  start = tx + ty * block_size
+  stride = block_size * grid_size
+
+  # assuming x and y inputs are same length
+  for i in range(start, x.shape[0], stride):
+    out[i] = x[i] != y
 
 @cuda.jit
 def kernel_batch_matmul(x, y, out):

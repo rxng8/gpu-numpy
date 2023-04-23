@@ -11,5 +11,4 @@ Setup for tools
 # from .type import ArrayLike
 
 # from gnpc import *
-from .base import array
-
+from .base import array, GNPArray
