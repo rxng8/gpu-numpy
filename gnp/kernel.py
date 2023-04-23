@@ -60,7 +60,7 @@ def kernel_add_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] + y
+    out[i] = x[i] + y[0]
 
 @cuda.jit
 def kernel_subtract(x, y, out):
@@ -90,7 +90,7 @@ def kernel_subtract_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] - y
+    out[i] = x[i] - y[0]
 
 @cuda.jit
 def kernel_multiply(x, y, out):
@@ -120,7 +120,7 @@ def kernel_multiply_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] * y
+    out[i] = x[i] * y[0]
 
 @cuda.jit
 def kernel_divide(x, y, out):
@@ -150,7 +150,7 @@ def kernel_divide_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] / y
+    out[i] = x[i] / y[0]
 
 @cuda.jit
 def kernel_floor_divide(x, y, out):
@@ -180,7 +180,7 @@ def kernel_floor_divide_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] // y
+    out[i] = x[i] // y[0]
 
 @cuda.jit
 def kernel_mod(x, y, out):
@@ -210,7 +210,7 @@ def kernel_mod_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] % y
+    out[i] = x[i] % y[0]
 
 @cuda.jit
 def kernel_pow(x, y, out):
@@ -240,7 +240,7 @@ def kernel_pow_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] ** y
+    out[i] = x[i] ** y[0]
 
 @cuda.jit
 def kernel_rshift(x, y, out):
@@ -270,7 +270,7 @@ def kernel_rshift_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] >> y
+    out[i] = x[i] >> y[0]
 
 @cuda.jit
 def kernel_lshift(x, y, out):
@@ -300,7 +300,7 @@ def kernel_lshift_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] << y
+    out[i] = x[i] << y[0]
 
 @cuda.jit
 def kernel_logical_and(x, y, out):
@@ -330,7 +330,7 @@ def kernel_logical_and_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] and y
+    out[i] = x[i] and y[0]
 
 @cuda.jit
 def kernel_logical_or(x, y, out):
@@ -360,7 +360,7 @@ def kernel_logical_or_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] or y
+    out[i] = x[i] or y[0]
 
 @cuda.jit
 def kernel_logical_xor(x, y, out):
@@ -390,7 +390,7 @@ def kernel_logical_xor_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = (x[i] and not y) or (not x[i] and y)
+    out[i] = (x[i] and not y[0]) or (not x[i] and y[0])
 
 @cuda.jit
 def kernel_eq(x, y, out):
@@ -420,7 +420,7 @@ def kernel_eq_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] == y
+    out[i] = x[i] == y[0]
 
 @cuda.jit
 def kernel_gt(x, y, out):
@@ -450,7 +450,7 @@ def kernel_gt_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] > y
+    out[i] = x[i] > y[0]
 
 @cuda.jit
 def kernel_lt(x, y, out):
@@ -480,7 +480,7 @@ def kernel_lt_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] < y
+    out[i] = x[i] < y[0]
 
 @cuda.jit
 def kernel_le(x, y, out):
@@ -510,7 +510,7 @@ def kernel_le_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] <= y
+    out[i] = x[i] <= y[0]
 
 @cuda.jit
 def kernel_ge(x, y, out):
@@ -540,7 +540,7 @@ def kernel_ge_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] >= y
+    out[i] = x[i] >= y[0]
 
 @cuda.jit
 def kernel_ne(x, y, out):
@@ -570,7 +570,7 @@ def kernel_ne_const(x, y, out):
 
   # assuming x and y inputs are same length
   for i in range(start, x.shape[0], stride):
-    out[i] = x[i] != y
+    out[i] = x[i] != y[0]
 
 @cuda.jit
 def kernel_batch_matmul(x, y, out):

@@ -2,7 +2,7 @@
 
 * GNP (GPU Numpy) is a fast and scalable tensor computing library that utilize the parallel computation of GPUs. The library is itself built upon `numpy` library. `numpy` is a computing library that runs on CPU only, and `GNP` boost the performance of this framework by optimizing computation of numpy ndarray on GPU.
 
-* GNP will have its own array structure which is based upon numpy. GNP implements GPU operations by binding python numpy data to C++ and use Cuda kernel to parallelize computation on GPU. The list of supported kernel is listed in the later section.
+* GNP will have its own array structure which is based upon numpy. GNP implements GPU operations by binding python numpy data and use Cuda kernel to parallelize computation on GPU. The list of supported kernel is listed in the later section.
 
 ## Requirements and Installation:
 * Requirements:
@@ -20,8 +20,8 @@
   python setup.py install
   ```
 
-## Project Structure and Supported APIs (Planned)
-### Supported Cuda Kernel:
+## Project Structure and Supported APIs
+### Supported Cuda Kernel
 * Unary ops:
   * Negative
   * Positive
@@ -48,6 +48,13 @@
 
 * Linear algebra:
   * Matrix multiplication
+
+### Supported APIs
+* Experimental:
+  * Neural network sequential API
+  * Fully connected neural network forward and backward pass
+  * SGD Optimizer, MSE Loss
+  * Non-linear activations: Relu, Tanh, Sigmoid
 
 ## Result
 * show code

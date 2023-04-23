@@ -31,16 +31,18 @@ class Dense(Layer):
   def __init__(self, input_size: int, output_size: int) -> None:
     super().__init__()
     self.weights["w"] = gnp.array(np.random.randn(input_size, output_size))
-    self.weights["b"] = gnp.array(np.random.randn(1, output_size))
+    self.weights["b"] = gnp.array(np.random.randn(output_size))
 
   def forward(self, inputs: gnp.GNPArray) -> gnp.GNPArray:
     self.inputs = inputs
-    return inputs @ self.weights["w"] + self.weights["b"]
-  
+    # return gnp.GNPArray((inputs @ self.weights["w"])._data + (self.weights["b"])._data) # autobroadcast
+    return gnp.GNPArray(inputs._data @ self.weights["w"]._data + self.weights["b"]._data) # autobroadcast
+
   def backward(self, grad: gnp.GNPArray) -> gnp.GNPArray:
-    self.grads["w"] = self.inputs.T @ grad
-    self.grads["b"] = np.sum(grad, axis=0)
-    return grad @ self.weights["w"].T
+    self.grads["w"] = gnp.GNPArray(self.inputs.T._data @ grad._data)
+    self.grads["b"] = gnp.GNPArray(np.sum(grad._data, axis=0))
+    return gnp.GNPArray(grad._data @ self.weights["w"]._data.T)
+
 
 class Activation(Layer):
   def __init__(
@@ -57,15 +59,15 @@ class Activation(Layer):
     return self.act_func(inputs)
 
   def backward(self, grad: gnp.GNPArray) -> gnp.GNPArray:
-    return self.act_func_prime(self.inputs) * grad
+    return gnp.GNPArray(self.act_func_prime(self.inputs)._data * grad._data)
 
 
 def tanh(x: gnp.GNPArray) -> gnp.GNPArray:
-  return np.tanh(x._data)
+  return gnp.GNPArray(np.tanh(x._data))
 
 def tanh_prime(x: gnp.GNPArray) -> gnp.GNPArray:
-  y = tanh(x._data)
-  return 1 - y ** 2
+  y = tanh(x)
+  return gnp.GNPArray(1 - y ** 2)
 
 class Tanh(Activation):
   def __init__(self):
@@ -82,20 +84,37 @@ class Sigmoid(Activation):
   def __init__(self):
     super().__init__(sigmoid, sigmoid_prime)
 
+
+def relu(x: gnp.GNPArray) -> gnp.GNPArray:
+  return gnp.GNPArray(np.maximum(x._data, 0))
+
+def relu_prime(x: gnp.GNPArray) -> gnp.GNPArray:
+  y = x.copy()._data
+  y[y < 0] = 0
+  return gnp.GNPArray(y)
+
+class Relu(Activation):
+  def __init__(self):
+    super().__init__(relu, relu_prime)
+
+
+
 class Loss:
-  def loss(self, label: gnp.GNPArray, target: gnp.GNPArray) -> float:
+  def loss(self, pred: gnp.GNPArray, target: gnp.GNPArray) -> float:
     raise NotImplementedError()
 
-  def grad(self, label: gnp.GNPArray, target: gnp.GNPArray) -> gnp.GNPArray:
+  def grad(self, pred: gnp.GNPArray, target: gnp.GNPArray) -> gnp.GNPArray:
     raise NotImplementedError()
 
 class MSE(Loss):
-  def __call__(self, label: gnp.GNPArray, target: gnp.GNPArray) -> float:
-    return gnp.GNPArray(np.sum((label._data - target._data) ** 2))
+  def __call__(self, pred: gnp.GNPArray, target: gnp.GNPArray) -> float:
+    return gnp.GNPArray(np.sum((pred._data - target._data) ** 2))
 
-  def grad(self, label: gnp.GNPArray, target: gnp.GNPArray) -> gnp.GNPArray:
-    return gnp.GNPArray(2 * (label._data - target._data))
+  def grad(self, pred: gnp.GNPArray, target: gnp.GNPArray) -> gnp.GNPArray:
+    return gnp.GNPArray(2 * (target._data - pred._data))
   
+
+
 class Sequential:
   def __init__(self, layers: Sequence[Layer]) -> None:
     self.layers = layers
@@ -126,10 +145,11 @@ class Optimizer:
     raise NotImplementedError
 
 class SGD(Optimizer):
-  def __init__(self, lr: float = 0.01) -> None:
+  def __init__(self, lr: float = 0.001) -> None:
     self.lr = lr
 
   def step(self, neural_network: Sequential) -> None:
-    for param, grad in neural_network.params_and_grads():
-      param -=  grad * gnp.GNPArray(self.lr)
-
+    for weight, grad in neural_network.params_and_grads():
+      # print(f"weight.shape: {weight.shape}")
+      # print(f"grad.shape: {grad.shape}")
+      weight._data -= grad._data * self.lr

@@ -17,15 +17,11 @@ def increment_by_one(an_array):
   if pos < an_array.size:  # Check array boundaries
       an_array[pos] += 1
 
-# %%
-
 an_array = np.asarray([1,2,3])
 
 threadsperblock = 32
 blockspergrid = (an_array.size + (threadsperblock - 1)) // threadsperblock
 a = increment_by_one[blockspergrid, threadsperblock](an_array)
-
-# %%
-
 an_array
 
+# (2, 3, 4)

@@ -12,3 +12,16 @@ Setup for tools
 
 # from gnpc import *
 from .base import array, GNPArray
+from .nn import (
+  Layer,
+  Dense,
+  Activation,
+  Tanh,
+  Sigmoid,
+  Relu,
+  Loss,
+  MSE,
+  Sequential,
+  Optimizer,
+  SGD
+)
