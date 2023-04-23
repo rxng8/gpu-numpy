@@ -60,3 +60,10 @@
 * show code
 * Compare time
 * Future work
+
+## Documentations
+
+* The slide is here: [https://docs.google.com/presentation/d/1AYxhXKqORdddHHGxe6CHCLwE8b6S0u4CGl_jjvH4tIY/edit?usp=sharing](https://docs.google.com/presentation/d/1AYxhXKqORdddHHGxe6CHCLwE8b6S0u4CGl_jjvH4tIY/edit?usp=sharing)
+  * The slide is also in the pdf file in the `docs` folder
+
+* For the class diagrams, install `Visual Paradigm` and run the `GNP.vpp` file in the `docs/vpp/` folder
