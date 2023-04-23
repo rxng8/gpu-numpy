@@ -74,12 +74,12 @@ print(f"d << 4 = {d << gnp.array(4)}")
 # %%
 
 d <<= gnp.array(4)
-print(f"{d}")
+print(f"d <<= 4. d = {d}")
 
 # %%
 
 d >>= gnp.array(2)
-print(f"{d}")
+print(f"d >>= 2. d = {d}")
 
 # %%
 
