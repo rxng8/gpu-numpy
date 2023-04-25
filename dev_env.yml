@@ -1,4 +1,3 @@
-name: gnp
 channels:
   - conda-forge
   - defaults
@@ -70,4 +69,3 @@ dependencies:
     - cmake==3.26.1
     - numpy==1.24.2
     - numba==0.56.4
-prefix: /home/alex/anaconda3/envs/gnp
