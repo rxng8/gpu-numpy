@@ -14,8 +14,9 @@
   ```
   # First, create a conda environment and install:
   conda create -n gnp pip python=3.10
+  conda activate gnp
   # install required libraries
-  conda env update dev_env.yml
+  conda env update -f dev_env.yml
   # Instlal current library
   python setup.py install
   ```
