@@ -17,6 +17,7 @@
   conda activate gnp
   # install required libraries
   conda env update -f dev_env.yml
+  conda install cudatoolkit
   # Instlal current library
   python setup.py install
   ```
